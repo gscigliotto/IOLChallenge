@@ -1,9 +1,11 @@
 ###Informe de Cambios IOLCodingChallenge
 
 ###Introducción
+
 El presente documento tiene como objetivo enumerar y describir las modificaciones realizadas en la solución. también describir como él mismo se puede extender a partir de las modificaciones realizadas.
 
 ###Estado Inicial
+
 Se ejecutan los test tal como estaban y se detecta que hay 2 que fallan.
 
 
