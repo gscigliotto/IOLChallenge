@@ -1,9 +1,9 @@
-Informe de Cambios IOLCodingChallenge
+###Informe de Cambios IOLCodingChallenge
 
-#Introducción
+###Introducción
 El presente documento tiene como objetivo enumerar y describir las modificaciones realizadas en la solución. también describir como él mismo se puede extender a partir de las modificaciones realizadas.
 
-#Estado Inicial
+###Estado Inicial
 Se ejecutan los test tal como estaban y se detecta que hay 2 que fallan.
 
 
@@ -12,7 +12,7 @@ Se detecta que la solución tal como está es poco escalable, la misma  resuelve
 TODO: Implementar Trapecio/ Rectángulo, agregar otro idioma a reporting.
 
 
-#Cambios propuestos
+###Cambios propuestos
 Separar la lógica en distintos componentes, paquetizar y organizar la solucoin.
 Abstraer el concepto de FormaGeometrica y implementar de manera concreta cada una de sus varianetes, separar por otro la generación de reportes, y por otro el manejo del idioma del reporte
 
@@ -26,7 +26,7 @@ La clase ImprimirFormaHTML es nuestra clase concreta que se ocupa de las salidas
 
 Datos: como decidí almacenar los distintos idiomas en objeto json, lo que hice fue crear una interfaz de acceso a datos, cuestión que si algún día se quiere cambiar la forma de almacenar o recuperar los datos sea sencillo de cambiar.
 
-#Agregar un idioma nuevo
+###Agregar un idioma nuevo
 
 Agregar un idioma nuevo es tan sencillo como agregar la descripción de los labels al archivo Json.
 Dentro del projecto CodingChallenge.Data hay un archivo que se llama Idimoas.json.
@@ -38,7 +38,7 @@ Una vez agregada la descripción en el nuevo idioma de cada una de las propiedad
 
 Listo ya se configuró un nuevo idioma para el reporte, faltaría agregar los test para la salida en nuevo idioma.
 
-#Agregar una nueva forma
+###Agregar una nueva forma
 
 Para agregar la nueva forma debemos ir al proyecto de entidades, crear una nueva clase con el nombre de la forma que queremos crear, y heredar de FormaGeometrica.
 Implementar los métodos CalcularArea() y CalcularPerimetro().
