@@ -1,32 +1,58 @@
+Informe de Cambios IOLCodingChallenge
 
-# InvertirOnline.com Coding Challenge
+#Introducción
+El presente documento tiene como objetivo enumerar y describir las modificaciones realizadas en la solución. también describir como él mismo se puede extender a partir de las modificaciones realizadas.
 
-Bienvenido!
+#Estado Inicial
+Se ejecutan los test tal como estaban y se detecta que hay 2 que fallan.
 
-Nos encontramos en la búsqueda de desarrolladores .NET para que se incorporen a nuestro equipo. Después de múltiples procesos de selección, llegamos a la conclusión de que el código habla por si mismo. Con lo cual si te sentís dispuesto a afrontar el desafío, por favor tomate un rato para jugar con el problema y resolverlo.
 
-### Cómo participar del proceso?
+Los test fallan porque el aserts usa como separador de miles “,” y la función devuelve como separador de miles “.” 
+Se detecta que la solución tal como está es poco escalable, la misma  resuelve todo en un sola clase y en un solo proyecto, hay acoplamiento y falta de cohesión, toda la lógica se encuentra en la clase FormaGeometrica. la misma resuelve el manejo cálculo de área y perímetro de distintas formas geométricas, se ocupa de generar el reporte y el manejo del idioma del reporte.
+TODO: Implementar Trapecio/ Rectángulo, agregar otro idioma a reporting.
 
-Abajo detallamos el problema a resolver, cuando consideres que está resuelto, **no** envíes pull request. Enviá un mail a busquedas.it@invertironline.com con tu resolución (con un link de descarga al repositorio de tu preferencia), y si tenés algún comentario sobre tu implementación, también podés agregarlo ahí.
 
-### El problema
+#Cambios propuestos
+Separar la lógica en distintos componentes, paquetizar y organizar la solucoin.
+Abstraer el concepto de FormaGeometrica y implementar de manera concreta cada una de sus varianetes, separar por otro la generación de reportes, y por otro el manejo del idioma del reporte
 
-Tenemos un método que genera un reporte en base a una colección de formas geométricas, procesando algunos datos para presentar información extra. La firma del método es:
+Como a futuro el manejo y la creación de estas formas geométricas puede ir siendo más complejo decidí incorporar un abtractFactory que se ocupa de crear esta familia de formas geométricas, entendiendo que la familia inicial que contamos en este ejemplo es 2D pero a futuro podemos querer que estos mismos objetos se vean en 3D. A esta altura esto no es tan necesario.
 
-```csharp
-public static string Imprimir(List<FormaGeometrica> formas, int idioma)
-```
+La generalización FormaGeometrica tiene 2 métodos abstractos que tengo que implementar en cada extensión que son CalcularArea() y CalcularPerimetro().
 
-Al mismo tiempo, encontramos muy díficil el poder agregar o bien una nueva forma geométrica, o imprimir el reporte en otro idioma. Nos gustaría poder dar soporte para que el usuario pueda agregar otros tipos de formas u obtener el reporte en otros idiomas, pero extender la funcionalidad del código es muy doloroso. ¿Nos podrías dar una mano a refactorear la clase FormaGeometrica? Dentro del código encontrarás un TODO con nuevos requerimientos a satisfacer una vez completada la refactorización.
+ImprimirForma también es una generalización esta clase define en su constructor que tiene que recibir la clase Idioma para dejarlo seteado internamente. Esto es algo comun a todas las salidas en reportes.
 
-Acompañando al proyecto encontrarás una serie de tests unitarios (librería NUnit) que describen el comportamiento del método Imprimir. **Se puede modificar cualquier cosa del código y de los tests, con la única condición que los tests deben pasar correctamente al entregar la solución.** 
+La clase ImprimirFormaHTML es nuestra clase concreta que se ocupa de las salidas en texto, en esta instancia se estaba haciendo una salida en html, pero a futuro si queremos agregar una salida en PDF tan solo tenemos que extender esta clase e implementar la lógica de la salida PDF.
 
-Se agradece también la inclusión de nuevos tests unitarios para validar el comportamiento de la nueva funcionalidad agregada.
+Datos: como decidí almacenar los distintos idiomas en objeto json, lo que hice fue crear una interfaz de acceso a datos, cuestión que si algún día se quiere cambiar la forma de almacenar o recuperar los datos sea sencillo de cambiar.
 
-### Cómo funciona
+#Agregar un idioma nuevo
 
-Lo que te encontrás al levantar la .sln es una librería con el objeto de negocio FormaGeometrica, y un pequeño proyecto con test unitarios sobre el método de impresión de reporte.
+Agregar un idioma nuevo es tan sencillo como agregar la descripción de los labels al archivo Json.
+Dentro del projecto CodingChallenge.Data hay un archivo que se llama Idimoas.json.
 
-La resolución es libre y cómo encarar el problema queda en el criterio de quien lo resuelva!
+Cada elemento representa un label que se imprime, también acá se almacenan los nombres de los objetos en distintos idiomas y su denominación en plural.
 
-**¡¡Buena suerte!!**
+Una vez agregada la descripción en el nuevo idioma de cada una de las propiedades del JSON tenemos que agregar dentro del Enum de Idiomas el idioma que creamos en el  JSON.
+
+
+Listo ya se configuró un nuevo idioma para el reporte, faltaría agregar los test para la salida en nuevo idioma.
+
+#Agregar una nueva forma
+
+Para agregar la nueva forma debemos ir al proyecto de entidades, crear una nueva clase con el nombre de la forma que queremos crear, y heredar de FormaGeometrica.
+Implementar los métodos CalcularArea() y CalcularPerimetro().
+
+También debemos agregar la denominación para esta forma dentro del json de idimoa.
+Si la clase se llama Rectángulo, la propiedad para singular debe llamarse Rectangulo tambien, y para la propiedad en plural se agrega el sufijo “Plural” ej: RectanguloPlural.
+
+Implemento constructor y métodos.
+
+
+
+
+Agregar denominación de la forma, en todos los idiomas como en plural.
+
+
+
+También tenemos que agregar los métodos de creación en el Factory Lo único que falta es agregar los test que se consideren necesarios para la nueva forma y o nuevo idioma.
